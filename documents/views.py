@@ -11,6 +11,7 @@ import cloudinary.uploader
 
 from documents.models import Document
 from documents.serializers import DocumentSerializer
+from documents.llm import query_pdf
 
 
 class DocumentUploadView(APIView):
@@ -22,6 +23,7 @@ class DocumentUploadView(APIView):
         # we expect a response after calling cloudinary.uploader() func
         # handle exceptions here when
         try:
+            #TODO Use AWS ss3 to store pdf
             res_uploaded_data  = cloudinary.uploader.upload(doc)
             # After getting response create a document with the meta data we got from the response 
             print(res_uploaded_data)
@@ -43,3 +45,21 @@ class DocumentUploadView(APIView):
 class DocumentsAPIView(ListAPIView):
     serializer_class = DocumentSerializer
     queryset = Document.objects.all()
+    
+    
+class QueryPDFAPIView(APIView):
+    
+    def post(self, request):
+        query_txt = request.data.get('query')
+        # document_id = request.data.get('doc_id')
+        
+        try:
+            # doc = Document.objects.get(id=document_id)
+            
+            # retrieve document url 
+            res = query_pdf(query_txt)
+            
+            return Response(data={"msg": "success", "data": res, "status": 200}, status=status.HTTP_200_OK)
+            
+        except Exception as e:
+            return Response(data={"msg":str(e), "status": 400}, status=status.HTTP_400_BAD_REQUEST)

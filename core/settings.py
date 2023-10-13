@@ -14,15 +14,21 @@ from pathlib import Path
 
 import cloudinary
 
+from dotenv import load_dotenv
+
+load_dotenv()  # take environment variables from .env.
+
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Set your Cloudinary configuration using environment variables
 cloudinary.config(
-    cloud_name=os.environ.get("CLOUDINARY_CLOUD_NAME", "your_default_cloud_name"),
-    api_key=os.environ.get("CLOUDINARY_API_KEY", "your_default_api_key"),
-    api_secret=os.environ.get("CLOUDINARY_API_SECRET", "your_default_api_secret")
+    cloud_name=os.environ.get("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.environ.get("CLOUDINARY_API_KEY"),
+    api_secret=os.environ.get("CLOUDINARY_API_SECRET")
 )
 
 
@@ -35,7 +41,7 @@ SECRET_KEY = 'django-insecure-g*idh&2u9j1iqwya_)*v=))+=v1-(%g_7d^%behhvr)u@e0ce6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
